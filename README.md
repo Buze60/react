@@ -1,4 +1,23 @@
-# React + TypeScript + Vite
+# Finance Management System (FMS)
+
+MERN-based FMS with Excel-like grid, JWT auth, RBAC, CSV/XLSX import/export.
+
+## Getting Started
+
+1. Copy `.env.example` to `.env` and fill secrets.
+2. Install root deps (frontend already present):
+   - Frontend: `npm install`
+   - Backend: `npm install --prefix server`
+3. Start backend:
+   - `npm run dev --prefix server`
+4. Start frontend:
+   - `npm run dev`
+
+Default URLs:
+- API: `http://localhost:4000/api/v1/health`
+- Web: `http://localhost:5173`
+
+SRS located at `docs/SRS_FMS_v1.0.md`.
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
