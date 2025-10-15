@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { Transaction } from '../models/Transaction';
+import { transactionCreateSchema, transactionUpdateSchema } from '../validators/transaction';
 import dayjs from 'dayjs';
 
 export async function listTransactions(req: Request, res: Response) {
@@ -48,13 +49,21 @@ export async function getTransaction(req: Request, res: Response) {
 }
 
 export async function createTransaction(req: Request, res: Response) {
-  const body = req.body;
+  const parsed = transactionCreateSchema.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(422).json({ error: { code: 'VALIDATION_ERROR', message: 'Invalid input', details: parsed.error.flatten() } });
+  }
+  const body = parsed.data as any;
   const item = await Transaction.create({ ...body, createdBy: req.user!.id });
   res.status(201).json(item);
 }
 
 export async function updateTransaction(req: Request, res: Response) {
-  const body = req.body;
+  const parsed = transactionUpdateSchema.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(422).json({ error: { code: 'VALIDATION_ERROR', message: 'Invalid input', details: parsed.error.flatten() } });
+  }
+  const body = parsed.data as any;
   const item = await Transaction.findByIdAndUpdate(
     req.params.id,
     { $set: { ...body, updatedBy: req.user!.id } },

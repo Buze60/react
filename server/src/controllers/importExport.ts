@@ -48,7 +48,17 @@ export async function importTransactions(req: Request, res: Response) {
 
 export async function exportTransactions(req: Request, res: Response) {
   const format = (req.query.format as string) || 'csv';
-  const cursor = Transaction.find({}).lean().cursor();
+  const filter: any = {};
+  const { from, to, type, category, q } = req.query as any;
+  if (from || to) {
+    filter.date = {};
+    if (from) filter.date.$gte = new Date(from);
+    if (to) filter.date.$lte = new Date(to);
+  }
+  if (type) filter.type = { $in: String(type).split(',') };
+  if (category) filter.category = { $in: String(category).split(',') };
+  if (q) filter.description = { $regex: String(q), $options: 'i' };
+  const cursor = Transaction.find(filter).lean().cursor();
 
   if (format === 'xlsx') {
     const rows: any[] = [];
