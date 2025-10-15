@@ -61,6 +61,7 @@ export default function TransactionsPage() {
         <button className="btn btn-outline-success" onClick={() => onExport('csv')}>Export CSV</button>
         <button className="btn btn-outline-success" onClick={() => onExport('xlsx')}>Export XLSX</button>
       </div>
+      {loading && <div className="alert alert-info">Loading…</div>}
       <div className="ag-theme-quartz" style={{ height: '75vh' }}>
         <AgGridReact
           rowData={rowData}
